@@ -1,0 +1,3 @@
+/Users/pasarevladutflavius/CLionProjects/Dog-Shelter/cmake-build-debug/CMakeFiles/Dog_Shelter.dir
+/Users/pasarevladutflavius/CLionProjects/Dog-Shelter/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/pasarevladutflavius/CLionProjects/Dog-Shelter/cmake-build-debug/CMakeFiles/rebuild_cache.dir
