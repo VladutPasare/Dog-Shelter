@@ -27,7 +27,7 @@ void TestDomain::testDog() {
     assert(dog1.getAge() == 4);
 
     // test toString
-    assert(dog1.toString() == "Name: Cooper | Breed: Akita | Photo link: null | Age: 4");
+    assert(dog1.toString() == "Name: Cooper | Breed: Akita | Photo linkField: null | Age: 4");
 
     // test toHTMLFormat
     assert(dog1.toHTMLFormat() == "\n<tr>\n"

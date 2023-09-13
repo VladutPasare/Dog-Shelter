@@ -42,9 +42,17 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/pasarevladutflavius/CLionProjects/Dog-Shelter -B/Users/pasarevladutflavius/CLionProjects/Dog-Shelter/cmake-build-debug
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/pasarevladutflavius/Documents/GitHub/Dog-Shelter -B/Users/pasarevladutflavius/Documents/GitHub/Dog-Shelter/cmake-build-debug
   description = Re-running CMake...
   generator = 1
+
+
+#############################################
+# Rule for cleaning additional files.
+
+rule CLEAN_ADDITIONAL
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCONFIG=$CONFIG -P CMakeFiles/clean_additional.cmake
+  description = Cleaning additional files...
 
 
 #############################################

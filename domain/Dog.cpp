@@ -27,7 +27,7 @@ std::string Dog::toString() const {
     std::string DogStr;
     DogStr += "Name: " + name + " | ";
     DogStr += "Breed: " + breed + " | ";
-    DogStr += "Photo link: " + photo_link + " | ";
+    DogStr += "Photo linkField: " + photo_link + " | ";
     DogStr += "Age: " + std::to_string(age);
     return DogStr;
 }

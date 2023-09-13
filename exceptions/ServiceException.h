@@ -1,13 +1,12 @@
-#ifndef KEEP_CALM_AND_ADOPT_A_PET_SERVICEEXCEPTION_H
-#define KEEP_CALM_AND_ADOPT_A_PET_SERVICEEXCEPTION_H
-#include <exception>
+#ifndef DOG_SHELTER_SERVICEEXCEPTION_H
+#define DOG_SHELTER_SERVICEEXCEPTION_H
+#include "Exception.h"
 #include <string>
 
-class ServiceException : public std::exception {
+class ServiceException : public Exception {
 private:
     std::string message;
 public:
-    explicit ServiceException(const std::string& errorMessage);
-    const std::string& getErrorMessage() const;
+    explicit ServiceException(const std::string& errorMessage) : Exception(errorMessage) {}
 };
-#endif //KEEP_CALM_AND_ADOPT_A_PET_SERVICEEXCEPTION_H
+#endif //DOG_SHELTER_SERVICEEXCEPTION_H

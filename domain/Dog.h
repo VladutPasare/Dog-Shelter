@@ -1,5 +1,5 @@
-#ifndef KEEP_CALM_AND_ADOPT_A_PET_DOG_H
-#define KEEP_CALM_AND_ADOPT_A_PET_DOG_H
+#ifndef DOG_SHELTER_DOG_H
+#define DOG_SHELTER_DOG_H
 #include <string>
 
 
@@ -27,4 +27,4 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Dog& dog);
 };
 
-#endif //KEEP_CALM_AND_ADOPT_A_PET_DOG_H
+#endif //DOG_SHELTER_DOG_H

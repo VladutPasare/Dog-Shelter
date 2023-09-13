@@ -1,14 +1,13 @@
-#ifndef KEEP_CALM_AND_ADOPT_A_PET_UIEXCEPTION_H
-#define KEEP_CALM_AND_ADOPT_A_PET_UIEXCEPTION_H
-#include "exception"
+#ifndef DOG_SHELTER_UIEXCEPTION_H
+#define DOG_SHELTER_UIEXCEPTION_H
+#include "Exception.h"
 #include <string>
 
-class UIException : public std::exception {
+class UIException : public Exception {
 private:
     std::string message;
 public:
-    explicit UIException(const std::string& errorMessage);
-    const std::string& getErrorMessage() const;
+    explicit UIException(const std::string& errorMessage) : Exception(errorMessage) {}
 };
 
-#endif //KEEP_CALM_AND_ADOPT_A_PET_UIEXCEPTION_H
+#endif //DOG_SHELTER_UIEXCEPTION_H

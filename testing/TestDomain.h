@@ -1,5 +1,5 @@
-#ifndef KEEP_CALM_AND_ADOPT_A_PET_TESTDOMAIN_H
-#define KEEP_CALM_AND_ADOPT_A_PET_TESTDOMAIN_H
+#ifndef DOG_SHELTER_TESTDOMAIN_H
+#define DOG_SHELTER_TESTDOMAIN_H
 
 class TestDomain {
 private:
@@ -8,4 +8,4 @@ public:
     TestDomain();
 };
 
-#endif //KEEP_CALM_AND_ADOPT_A_PET_TESTDOMAIN_H
+#endif //DOG_SHELTER_TESTDOMAIN_H

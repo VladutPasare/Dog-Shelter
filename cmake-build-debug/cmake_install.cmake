@@ -1,4 +1,4 @@
-# Install script for directory: /Users/pasarevladutflavius/CLionProjects/Dog-Shelter
+# Install script for directory: /Users/pasarevladutflavius/Documents/GitHub/Dog-Shelter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/pasarevladutflavius/CLionProjects/Dog-Shelter/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/pasarevladutflavius/Documents/GitHub/Dog-Shelter/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

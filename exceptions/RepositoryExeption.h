@@ -1,13 +1,12 @@
-#ifndef KEEP_CALM_AND_ADOPT_A_PET_REPOSITORYEXEPTION_H
-#define KEEP_CALM_AND_ADOPT_A_PET_REPOSITORYEXEPTION_H
-#include <exception>
+#ifndef DOG_SHELTER_REPOSITORYEXEPTION_H
+#define DOG_SHELTER_REPOSITORYEXEPTION_H
+#include "Exception.h"
 #include <string>
 
-class RepositoryException : public std::exception {
+class RepositoryException : public Exception {
 private:
     std::string message;
 public:
-    explicit RepositoryException(const std::string &errorMessage);
-    const std::string& getErrorMessage() const;
+    explicit RepositoryException(const std::string &errorMessage) : Exception(errorMessage) {}
 };
-#endif //KEEP_CALM_AND_ADOPT_A_PET_REPOSITORYEXEPTION_H
+#endif //DOG_SHELTER_REPOSITORYEXEPTION_H
