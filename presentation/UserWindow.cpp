@@ -3,10 +3,9 @@
 #include <QLabel>
 
 UserWindow::UserWindow(Service& service, QWidget *parent) : service(service) {
-    this->resize(800,650);
+    this->setFixedSize(800,650);
     this->setWindowTitle("User");
 
-    newDogsWindow = new NewDogsWindow(service);
     statisticsWindow = new StatisticsWindow(service);
 
     mainLayout = new QVBoxLayout;
@@ -25,6 +24,7 @@ UserWindow::UserWindow(Service& service, QWidget *parent) : service(service) {
     initButtons();
     setUpTable();
     setUpMainMenu();
+    connectSignalsAndSlots();
 }
 
 void UserWindow::setUpTable() {
@@ -53,22 +53,36 @@ void UserWindow::setUpMainMenu() {
 
     mainLayout->addWidget(exitButton);
     mainLayout->setAlignment(exitButton, Qt::AlignCenter);
+}
 
+void UserWindow::initButtons() {
+    newDogsButton = new CustomButton("New Dogs");
+    removeButton = new CustomButton{"Remove"};
+    undoButton = new CustomButton("Undo");
+    redoButton = new CustomButton("Redo");
+    statisticsButton = new CustomButton("Statistics");
+    seeExternallyButton = new CustomButton("See externally");
+    exitButton = new CustomButton("Exit");
+}
+
+void UserWindow::connectSignalsAndSlots() {
     connect(newDogsButton, &QPushButton::clicked, this, [&] () {
-
-        service.filter("", -1);
+        service.reset_filtered_list();
 
         if(service.getFilteredList().empty())
             noDogsMessage->exec();
         else {
-            newDogsWindow->loadNextDogData();
-            openNewDogsWindow();
+            newDogsDialog = new NewDogsDialog(service);
+            newDogsDialog->loadNextDogData();
+            connect(newDogsDialog, &NewDogsDialog::updateTable, this, [&] () {
+                emit dogsTableModel->layoutChanged();
+                emit updateAdminTable();
+            });
+            newDogsDialog->exec();
+            emit dogsTableModel->layoutChanged();
+            emit updateAdminTable();
+            delete newDogsDialog;
         }
-    });
-
-    connect(newDogsWindow, &NewDogsWindow::updateTable, this, [&] () {
-        emit dogsTableModel->layoutChanged();
-        emit updateAdminTable();
     });
 
     connect(removeButton, &QPushButton::clicked, this, [&] () {
@@ -77,11 +91,9 @@ void UserWindow::setUpMainMenu() {
             selectDogMessage->exec();
         }
         else {
-            int row = indexes[0].row();
-            const Dog& dog = service.getAdoptedDogs()[row];
 
             try {
-                service.removeFromAdoptionList(dog);
+                service.removeFromAdoptionList(indexes[0].row());
                 emit updateAdminTable();
             }
             catch (const Exception& e) {
@@ -99,32 +111,31 @@ void UserWindow::setUpMainMenu() {
             dogsTableModel->layoutChanged();
             emit updateAdminTable();
         }
+        catch(Exception& e) {
+            //std::cout<<e.getErrorMessage();
+        }
+    });
+    connect(redoButton, &QPushButton::clicked, this, [&] () {
+        try {
+            service.redoUserCommand();
+            dogsTableModel->layoutChanged();
+            emit updateAdminTable();
+        }
         catch(...) {
 
         }
     });
-    connect(redoButton, &QPushButton::clicked, this, [&] () {
-       try {
-           service.redoUserCommand();
-           dogsTableModel->layoutChanged();
-           emit updateAdminTable();
-       }
-       catch(...) {
-
-       }
-    });
 
     connect(statisticsButton, &QPushButton::clicked, this, [&] () {
         statisticsWindow->populate();
-        openStatisticsWindow();
+        openNewWindow(statisticsWindow);
     });
 
     connect(seeExternallyButton, &QPushButton::clicked, this, [&] () {
-        std::string file_path = "../files/file3.html";
-        const std::string command = "open " + file_path;
+        const std::string command = "open " + service.getUserRepoFilePath();
         int exit_code = std::system(command.c_str());
-        if(exit_code != 0 ) {
-            //std::cout << "An error occurred while opening the file!";
+        if(exit_code != 0) {
+            // error
         }
     });
 
@@ -132,28 +143,4 @@ void UserWindow::setUpMainMenu() {
         this->close();
         back();
     });
-
-
-}
-
-void UserWindow::openNewDogsWindow() {
-    this->hide();
-    newDogsWindow->show();
-    connect(newDogsWindow, &NewDogsWindow::back, this, &UserWindow::show);
-}
-
-void UserWindow::openStatisticsWindow() {
-    this->hide();
-    statisticsWindow->show();
-    connect(statisticsWindow, &StatisticsWindow::back, this, &UserWindow::show);
-}
-
-void UserWindow::initButtons() {
-    newDogsButton = new CustomButton("New Dogs");
-    removeButton = new CustomButton{"Remove"};
-    undoButton = new CustomButton("Undo");
-    redoButton = new CustomButton("Redo");
-    statisticsButton = new CustomButton("Statistics");
-    seeExternallyButton = new CustomButton("See externally");
-    exitButton = new CustomButton("Exit");
 }

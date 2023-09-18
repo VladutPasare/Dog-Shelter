@@ -3,11 +3,11 @@
 
 StatisticsWindow::StatisticsWindow(Service &service, QWidget *parent) : service(service) {
     this->resize(800, 650);
+    this->setWindowTitle("Statistics");
     mainLayout = new QVBoxLayout{};
     tabWidget = new QTabWidget{};
 
     pieChart = new QChart{};
-    pieChart->setTitle("Distribution of dog breeds in the shelter");
 
     pieSeries = new QPieSeries{};
     pieChart->addSeries(pieSeries);
@@ -16,7 +16,7 @@ StatisticsWindow::StatisticsWindow(Service &service, QWidget *parent) : service(
     pieChartView->setRenderHint(QPainter::Antialiasing);
 
     barChart = new QChart{};
-
+    barChart->legend()->setVisible(false);
     axisX = new QBarCategoryAxis{};
     axisY = new QValueAxis{};
 
@@ -26,24 +26,18 @@ StatisticsWindow::StatisticsWindow(Service &service, QWidget *parent) : service(
     tabWidget->addTab(pieChartView, "Pie Chart");
     tabWidget->addTab(barChartView, "Bar Chart");
 
-    exitButton = new CustomButton{"Exit"};
+    initButtons();
+    connectSignalsAndSlots();
 
     mainLayout->addWidget(tabWidget);
     mainLayout->addWidget(exitButton);
     mainLayout->setAlignment(exitButton, Qt::AlignHCenter);
     this->setLayout(mainLayout);
-
-    connect(exitButton, &QPushButton::clicked, this, [&] () {
-        pieSeries->clear();
-        barSeries->clear();
-        this->close();
-        back();
-    });
 }
 
 void StatisticsWindow::populate() {
 
-    barSet = new QBarSet{"Breeds"};
+    barSet = new QBarSet{""};
     barChart->removeAllSeries();
     barChart->removeAxis(axisX);
     barChart->removeAxis(axisY);
@@ -52,13 +46,16 @@ void StatisticsWindow::populate() {
     unsigned int maxCount = 0;
     for(const std::string& breed : service.getDogBreeds()) {
         unsigned int count = service.countDogsByBreed(breed);
-        pieSeries->append(QString::fromStdString(breed), count);
+        auto slice = pieSeries->append(QString::fromStdString(breed), count);
+        slice->setLabel(QString::fromStdString(breed) + '(' + QString::number(count) + ')');
+        slice->setLabelVisible(true);
         *barSet << count;
         axisX->append(QString::fromStdString(breed));
 
         if(count > maxCount)
             maxCount = count;
     }
+
     axisY->setTickCount(maxCount + 1);
     axisY->setLabelFormat("%d");
     axisY->setMax(maxCount);
@@ -69,4 +66,17 @@ void StatisticsWindow::populate() {
 
     barChart->addAxis(axisX, Qt::AlignBottom);
     barChart->addAxis(axisY, Qt::AlignLeft);
+}
+
+void StatisticsWindow::initButtons() {
+    exitButton = new CustomButton{"Exit"};
+}
+
+void StatisticsWindow::connectSignalsAndSlots() {
+    connect(exitButton, &QPushButton::clicked, this, [&] () {
+        pieSeries->clear();
+        barSeries->clear();
+        this->close();
+        back();
+    });
 }

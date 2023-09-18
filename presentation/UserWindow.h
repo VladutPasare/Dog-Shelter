@@ -1,21 +1,21 @@
 #ifndef DOG_SHELTER_USERWINDOW_H
 #define DOG_SHELTER_USERWINDOW_H
-#include "NewDogsWindow.h"
+#include "Window.h"
+#include "NewDogsDialog.h"
 #include "../bussiness/Service.h"
 #include "CustomTable.h"
 #include "CustomButton.h"
 #include "DogsTableModel.h"
 #include "DogPictureDelegate.h"
 #include "StatisticsWindow.h"
-#include <QWidget>
-#include <QPushButton>
 
-class UserWindow : public QWidget {
+
+class UserWindow : public Window {
     Q_OBJECT
 private:
     Service& service;
 
-    NewDogsWindow* newDogsWindow;
+    NewDogsDialog* newDogsDialog;
     StatisticsWindow* statisticsWindow;
 
     QVBoxLayout* mainLayout;
@@ -38,14 +38,10 @@ private:
     void setUpTable();
     void setUpMainMenu();
     void initButtons();
-    void openNewDogsWindow();
-    void openStatisticsWindow();
+    void connectSignalsAndSlots();
 public:
     explicit UserWindow(Service& service, QWidget* parent = nullptr);
-
-signals:
-    void back();
-    void updateAdminTable();
-
+    signals:
+        void updateAdminTable();
 };
 #endif //DOG_SHELTER_USERWINDOW_H

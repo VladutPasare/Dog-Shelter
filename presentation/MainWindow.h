@@ -1,14 +1,13 @@
 #ifndef DOG_SHELTER_MAINWINDOW_H
 #define DOG_SHELTER_MAINWINDOW_H
-#include <QWidget>
+#include "Window.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 #include "UserWindow.h"
 #include "AdminWindow.h"
 
 
-class MainWindow : public QWidget {
-    Q_OBJECT
+class MainWindow : public Window {
 private:
     Service& service;
     AdminWindow *adminWindow;
@@ -22,11 +21,8 @@ private:
     void initWindow();
     void initButtons();
     void connectSignalsAndSlots();
-    void openAdminWindow();
-    void openUserWindow();
 public:
     explicit MainWindow(Service& service);
-    ~MainWindow() override;
 };
 
 

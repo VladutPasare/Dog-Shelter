@@ -8,52 +8,52 @@ TestService::TestService() {
     testNextDog();
     testUndoAdminCommand();
     testRedoAdminCommand();
-    //testAddToAdoptionList();
-    //testRemoveFromAdoptionList();
-    /*testUndoUserCommand();
-    testRedoUserCommand();*/
+    testAddToAdoptionList();
+    testRemoveFromAdoptionList();
+    testUndoUserCommand();
+    testRedoUserCommand();
     testFilter();
     testIsNegativeInteger();
 }
 
 void TestService::testAdd() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
     try {
-        service.add("Cooper", "Akita", "Photo Link", -1);
+        service.add("", "Akita", "link", 1);
         assert(false);
     }
     catch (const ServiceException& e) {
-        assert(e.getErrorMessage() == "Age cannot be negative!");
+        assert(e.getErrorMessage() == "Invalid name!");
     }
     assert(service.getDogsFromShelter().empty());
-    service.add("Cooper", "Akita", "Photo Link", 4);
+    service.add("Cooper", "Akita", "link", 4);
     assert(service.getDogsFromShelter().size() == 1);
     assert(service.getDogsFromShelter()[0].getName() == "Cooper");
     assert(service.getDogsFromShelter()[0].getBreed() == "Akita");
 
     try {
-        service.add("Cooper", "Akita", "Photo Link", 4);
+        service.add("Cooper", "Akita", "link", 4);
         assert(false);
     }
     catch (const RepositoryException& e) {
         assert(e.getErrorMessage() == "The provided item already exists in the repository!");
     }
 
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testRemove() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Cooper", "Akita", "Photo Link", 4);
-    service.add("Daisy", "Akita", "Photo Link", 2);
+    service.add("Cooper", "Akita", "link", 4);
+    service.add("Daisy", "Akita", "link", 2);
     assert(service.getDogsFromShelter().size() == 2);
 
     assert(service.getDogsFromShelter()[1].getName() == "Daisy");
@@ -62,40 +62,40 @@ void TestService::testRemove() {
     service.remove(0);
     assert(service.getDogsFromShelter().empty());
 
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testUpdate() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Cooper", "Akita", "Photo Link", 4);
-    service.add("Charlie", "Akita", "Photo Link", 4);
+    service.add("Cooper", "Akita", "link", 4);
+    service.add("Charlie", "Akita", "link", 4);
 
-    service.update(0, "Daisy", "Akita", "Photo Link", 4);
+    service.update(0, "Daisy", "Akita", "link", 4);
     assert(service.getDogsFromShelter()[1].getName() == "Daisy");
     assert(service.getDogsFromShelter().size() == 2);
 
     try {
-        service.update(1, "Charlie", "Akita", "Photo Link", 4);
+        service.update(1, "Charlie", "Akita", "link", 4);
         assert(false);
     }
     catch (const RepositoryException& e) {
         assert(e.getErrorMessage() == "The new item already exists in the repository!");
     }
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testNextDog() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
     try {
-        service.filter("", -1);
+        service.reset_filtered_list();
         const Dog& dog = service.nextDog();
         assert(false);
     }
@@ -103,10 +103,10 @@ void TestService::testNextDog() {
         assert(e.getErrorMessage() == "No dogs for this filtering!");
     }
 
-    service.add("Cooper", "Akita", "Photo Link", 4);
-    service.add("Daisy", "Akita", "Photo Link", 2);
+    service.add("Cooper", "Akita", "link", 4);
+    service.add("Daisy", "Akita", "link", 2);
 
-    service.filter("", -1);
+    service.reset_filtered_list();
     const Dog& dog1 = service.nextDog();
     assert(dog1.getName() == "Cooper");
     const Dog& dog2 = service.nextDog();
@@ -114,20 +114,20 @@ void TestService::testNextDog() {
     const Dog& dog3 = service.nextDog();
     assert(dog3 == dog1);
 
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testUndoAdminCommand() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Daisy", "Akita", "Photo Link", 3);
-    service.add("Cooper", "Akita", "Photo Link", 1);
+    service.add("Daisy", "Akita", "link", 3);
+    service.add("Cooper", "Akita", "link", 1);
     service.remove(0);
 
-    service.update(0, "Cooper", "Akita", "Photo Link", 5);
+    service.update(0, "Cooper", "Akita", "link", 5);
 
     assert(service.getDogsFromShelter()[0].getAge() == 5);
     service.undoAdminCommand();
@@ -150,18 +150,18 @@ void TestService::testUndoAdminCommand() {
     catch (const ServiceException& e) {
         assert(e.getErrorMessage() == "Cannot undo!");
     }
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testRedoAdminCommand() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Daisy", "Akita", "Photo Link", 3);
+    service.add("Daisy", "Akita", "link", 3);
     service.remove(0);
-    service.add("Cooper", "Akita", "Photo Link", 1);
+    service.add("Cooper", "Akita", "link", 1);
 
     service.undoAdminCommand();
     service.redoAdminCommand();
@@ -184,30 +184,33 @@ void TestService::testRedoAdminCommand() {
     assert(service.getDogsFromShelter().empty());
     service.undoAdminCommand();
 
-    service.update(0, "Charlie", "Akita", "Photo Link", 3);
+    service.update(0, "Charlie", "Akita", "link", 3);
     assert(service.getDogsFromShelter()[0].getName() == "Charlie");
     service.undoAdminCommand();
     assert(service.getDogsFromShelter()[0].getName() == "Daisy");
     service.redoAdminCommand();
     assert(service.getDogsFromShelter()[0].getName() == "Charlie");
-    adminRepository->clearFile();
+
+    admin_repository->clearFile();
 }
 
 void TestService::testAddToAdoptionList() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Cooper", "Akita", "Photo Link", 4);
-    service.add("Daisy", "Akita", "Photo Link", 2);
+    service.add("Cooper", "Akita", "link", 4);
+    service.add("Daisy", "Akita", "link", 2);
 
-    Dog d1("Cooper", "Akita", "Photo Link", 4);
-    Dog d2("Daisy", "Akita", "Photo Link", 2);
+    Dog d1("Cooper", "Akita", "link", 4);
+    Dog d2("Daisy", "Akita", "link", 2);
     assert(service.getAdoptedDogs().empty());
-    //service.addToAdoptionList(d1);
-    //assert(service.getAdoptedDogs().size() == 1);
-/*
+
+    service.reset_filtered_list();
+    service.addToAdoptionList(d1);
+    assert(service.getAdoptedDogs().size() == 1);
+
     service.addToAdoptionList(d2);
     assert(service.getAdoptedDogs()[0].getName() == "Cooper");
 
@@ -216,62 +219,80 @@ void TestService::testAddToAdoptionList() {
         assert(false);
     }
     catch (const RepositoryException& e) {
+        assert(e.getErrorMessage() == "Provided item not in repository!");
+    }
+
+    service.add("Cooper", "Akita", "link", 4);
+    try {
+        service.addToAdoptionList(d1);
+        assert(false);
+    }
+    catch (const RepositoryException& e) {
         assert(e.getErrorMessage() == "The provided item already exists in the repository!");
     }
 
-    adminRepository->clearFile();*/
+    admin_repository->clearFile();
+    user_repository->clearFile();
 }
-/*
+
 void TestService::testRemoveFromAdoptionList() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
 
-    Service service(adminRepository, userRepository);
+    Service service(admin_repository, user_repository);
 
-    service.add("Cooper", "Akita", "Photo Link", 4);
-    service.add("Daisy", "Akita", "Photo Link", 2);
-    Dog d1("Cooper", "Akita", "Photo Link", 4);
-    Dog d2("Daisy", "Akita", "Photo Link", 2);
+    service.add("Cooper", "Akita", "link", 4);
+    service.add("Daisy", "Akita", "link", 2);
+    service.add("Charlie", "Akita", "link", 3);
+    Dog d1("Cooper", "Akita", "link", 4);
+    Dog d2("Daisy", "Akita", "link", 2);
+    Dog d3("Charlie", "Akita", "link", 3);
 
+    service.reset_filtered_list();
     service.addToAdoptionList(d1);
     service.addToAdoptionList(d2);
+    service.addToAdoptionList(d3);
 
-   Dog dog("Charlie", "Akita", "Photo Link", 5);
-   try {
-       service.removeFromAdoptionList(dog);
-       assert(false);
-   }
-   catch (const RepositoryException& e) {
-       assert(e.getErrorMessage() == "Provided item not in repository!");
-   }
-   dog.setName("Daisy");
-   service.removeFromAdoptionList(dog);
-   assert(service.getAdoptedDogs().size() == 1);
-   assert(service.getAdoptedDogs()[0].getName() == "Cooper");
-   dog.setName("Cooper");
-   service.removeFromAdoptionList(dog);
-   assert(service.getAdoptedDogs().empty());
-   // dogs added back to admin repo
-   assert(service.getDogsFromShelter()[0].getName() == "Daisy");
-   assert(service.getDogsFromShelter()[1].getName() == "Cooper");
-   assert(service.getDogsFromShelter().size() == 2);
+    assert(service.getAdoptedDogs()[0].getName() == "Cooper");
+    assert(service.getAdoptedDogs()[1].getName() == "Daisy");
+    assert(service.getAdoptedDogs()[2].getName() == "Charlie");
 
-    adminRepository->clearFile();
+    service.removeFromAdoptionList(1);
+    assert(service.getAdoptedDogs().size() == 2);
+    assert(service.getAdoptedDogs()[0].getName() == "Cooper");
+    assert(service.getAdoptedDogs()[1].getName() == "Charlie");
+
+    service.removeFromAdoptionList(0);
+    assert(service.getAdoptedDogs().size() == 1);
+    assert(service.getAdoptedDogs()[0].getName() == "Charlie");
+
+    service.removeFromAdoptionList(0);
+    assert(service.getAdoptedDogs().empty());
+
+    // dogs added back to admin repo
+    assert(service.getDogsFromShelter()[0].getName() == "Daisy");
+    assert(service.getDogsFromShelter()[1].getName() == "Cooper");
+    assert(service.getDogsFromShelter()[2].getName() == "Charlie");
+    assert(service.getDogsFromShelter().size() == 3);
+
+    admin_repository->clearFile();
+    user_repository->clearFile();
 }
 
 void TestService::testUndoUserCommand() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Daisy", "Akita", "Photo Link", 1);
-    service.add("Cooper", "Akita", "Photo Link", 1);
+    service.add("Daisy", "Akita", "link", 1);
+    service.add("Cooper", "Akita", "link", 1);
 
-    service.addToAdoptionList(Dog("Daisy", "Akita", "Photo Link", 1));
-    service.addToAdoptionList(Dog("Cooper", "Akita", "Photo Link", 1));
-    service.removeFromAdoptionList(Dog("Cooper", "Akita", "Photo Link", 1));
+    service.reset_filtered_list();
+    service.addToAdoptionList(Dog("Daisy", "Akita", "link", 1));
+    service.addToAdoptionList(Dog("Cooper", "Akita", "link", 1));
+    service.removeFromAdoptionList(1);
     service.undoUserCommand();
 
     assert(service.getAdoptedDogs()[0].getName() == "Daisy");
@@ -292,22 +313,25 @@ void TestService::testUndoUserCommand() {
     catch(const ServiceException& e) {
         assert(e.getErrorMessage() == "Cannot undo!");
     }
+    admin_repository->clearFile();
+    user_repository->clearFile();
 }
 
 void TestService::testRedoUserCommand() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
-    service.add("Daisy", "Akita", "Photo Link", 1);
-    service.add("Cooper", "Akita", "Photo Link", 1);
-    service.add("Charlie", "Akita", "Photo Link", 2);
+    service.add("Daisy", "Akita", "link", 1);
+    service.add("Cooper", "Akita", "link", 1);
+    service.add("Charlie", "Akita", "link", 2);
 
-    service.addToAdoptionList(Dog("Daisy", "Akita", "Photo Link", 1));
-    service.removeFromAdoptionList(Dog("Daisy", "Akita", "Photo Link", 1));
-    service.addToAdoptionList(Dog("Cooper", "Akita", "Photo Link", 1));
-    service.addToAdoptionList(Dog("Charlie", "Akita", "Photo Link", 2));
+    service.reset_filtered_list();
+    service.addToAdoptionList(Dog("Daisy", "Akita", "link", 1));
+    service.removeFromAdoptionList(0);
+    service.addToAdoptionList(Dog("Cooper", "Akita", "link", 1));
+    service.addToAdoptionList(Dog("Charlie", "Akita", "link", 2));
 
     try {
         service.redoUserCommand();
@@ -333,17 +357,20 @@ void TestService::testRedoUserCommand() {
         service.redoUserCommand();
     assert(service.getAdoptedDogs()[1].getName() == "Charlie");
     assert(service.getAdoptedDogs().size() == 2);
-}
-*/
-void TestService::testFilter() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
 
-    service.add("Daisy", "Akita", "Photo Link", 3);
-    service.add("Cooper", "Akita", "Photo Link", 1);
-    service.add("Charlie", "none", "Photo Link", 2);
+    admin_repository->clearFile();
+    user_repository->clearFile();
+}
+
+void TestService::testFilter() {
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
+
+    service.add("Daisy", "Akita", "link", 3);
+    service.add("Cooper", "Akita", "link", 1);
+    service.add("Charlie", "Pug", "link", 2);
     service.filter("Akita", 3);
 
     // only one dog in the filtered list
@@ -352,11 +379,11 @@ void TestService::testFilter() {
     const Dog& dog2 = service.nextDog();
     assert(dog2.getName() == "Cooper");
 
-    service.filter("none", 4);
+    service.filter("Pug", 4);
     const  Dog& dog3 = service.nextDog();
     assert(dog3.getName() == "Charlie");
 
-    service.filter("none", 1);
+    service.filter("Pug", 1);
     try {
         service.nextDog();
         assert(false);
@@ -364,15 +391,14 @@ void TestService::testFilter() {
     catch (const ServiceException& e) {
         assert(e.getErrorMessage() == "No dogs for this filtering!");
     }
-
-    adminRepository->clearFile();
+    admin_repository->clearFile();
 }
 
 void TestService::testIsNegativeInteger() {
-    const std::string& adminFile = "../files/sample.txt", userFile = "../files/sample.html";
-    auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
-    auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
-    Service service(adminRepository, userRepository);
+    const std::string& admin_file = "../files/sample.txt", user_file = "../files/sample.html";
+    auto admin_repository = std::make_shared<FileRepository<Dog>>(admin_file);
+    auto user_repository = std::make_shared<HTMLRepository<Dog>>(user_file);
+    Service service(admin_repository, user_repository);
 
     assert(service.isNegativeInteger("-1") == true);
     assert(service.isNegativeInteger("-1324214") == true);

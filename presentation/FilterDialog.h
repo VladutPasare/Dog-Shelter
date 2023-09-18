@@ -24,7 +24,6 @@ private:
     QPushButton* cancelButton;
 public:
     explicit FilterDialog(QWidget* parent = nullptr);
-    ~FilterDialog();
     void setBreedComboBoxData(const std::set<std::string>& breeds);
     signals:
         void setFilterData(int maxAge, const std::string& breed);

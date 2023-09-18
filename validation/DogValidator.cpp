@@ -2,8 +2,25 @@
 
 bool DogValidator::validate(const Dog &dog) {
     error_message = "";
-    if(dog.getAge() < 0)
-        error_message = "Age cannot be negative!";
-    return error_message.empty();
-    // verifica si pentru breedField="" sau nameField sau photolink
+
+    if (dog.getName().empty()) {
+        error_message = "Invalid name!";
+        return false;
+    }
+
+    if (dog.getBreed().empty()) {
+        error_message = "Invalid breed!";
+        return false;
+    }
+
+    if (dog.getLink().empty()) {
+        error_message = "Invalid link!";
+        return false;
+    }
+
+    if(!dog.getAge()) {
+        error_message = "Invalid age!";
+        return false;
+    }
+    return true;
 }

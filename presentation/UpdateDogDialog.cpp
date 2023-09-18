@@ -1,39 +1,31 @@
 #include "UpdateDogDialog.h"
 
-UpdateDogDialog::UpdateDogDialog(Service &service, int index, QWidget *parent) : service(service), QDialog(parent) {
-    this->setFixedSize(360, 440);
+UpdateDogDialog::UpdateDogDialog(Service &service, int index, QWidget *parent) : service(service), index(index), QDialog(parent) {
+    this->setFixedSize(360, 500);
 
     mainLayout = new QVBoxLayout{};
     mainLayout->setAlignment(Qt::AlignHCenter);
     buttonsLayout = new QHBoxLayout{};
 
-    saveButton = new QPushButton("Save");
-    saveButton->setFixedSize(100, 32);
-
-    cancelButton = new QPushButton("Cancel");
-    cancelButton->setFixedSize(100, 32);
-
+    initButtons();
     buttonsLayout->addWidget(saveButton);
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->setAlignment(Qt::AlignHCenter);
     buttonsLayout->setSpacing(8);
 
-    const Dog& oldDog = service.getDogsFromShelter()[index];
-    std::string name = oldDog.getName();
-    std::string breed = oldDog.getBreed();
+    oldDog = service.getDogsFromShelter()[index];
 
-    QPixmap image(QString::fromStdString("../images/" + name + breed + ".png"));
+    QPixmap image(QString::fromStdString("../images/" + oldDog.getName() + oldDog.getBreed() + ".png"));
 
     if(image.isNull()) {
         std::string path = "../images/default.png";
         image = QPixmap(QString::fromStdString(path));
     }
     auto scaledImage = image.scaled(QSize(220, 220));
-    auto* dogPhoto = new QLabel;
-
+    dogPhoto = new QLabel;
+    dogPhoto->setFixedSize(220, 220);
     dogPhoto->setPixmap(scaledImage);
-    dogPhoto->setStyleSheet("border: 1px solid rgb(182, 189, 189); border-radius: 2px");
-    auto dogInfoLayout = new DogInfoLayout{oldDog};
+    dogInfoLayout = new DogInfoLayout{oldDog};
 
     mainLayout->addWidget(dogPhoto);
     mainLayout->setAlignment(dogPhoto, Qt::AlignHCenter);
@@ -43,6 +35,18 @@ UpdateDogDialog::UpdateDogDialog(Service &service, int index, QWidget *parent) :
 
     this->setLayout(mainLayout);
 
+    connectSignalsAndSlots();
+}
+
+void UpdateDogDialog::initButtons() {
+    saveButton = new QPushButton("Save");
+    saveButton->setFixedSize(100, 32);
+
+    cancelButton = new QPushButton("Cancel");
+    cancelButton->setFixedSize(100, 32);
+}
+
+void UpdateDogDialog::connectSignalsAndSlots() {
     connect(saveButton, &QPushButton::clicked, this, [=] () {
         std::string new_name = dogInfoLayout->getNameFieldText();
         std::string new_breed = dogInfoLayout->getBreedFieldText();
@@ -51,6 +55,11 @@ UpdateDogDialog::UpdateDogDialog(Service &service, int index, QWidget *parent) :
 
         try {
             this->service.update(index, new_name, new_breed, new_link, new_age);
+
+            QDir destinationDirectory("../images");
+            QFile file("../images/" + QString::fromStdString(oldDog.getName() + oldDog.getBreed()) + ".png");
+            if(file.exists())
+                file.rename(destinationDirectory.filePath(QString::fromStdString(new_name + new_breed) + ".png"));
             this->close();
             back();
         }

@@ -5,16 +5,13 @@
 
 template <class T>
 class FileRepository : public Repository<T> {
-private:
+protected:
     void readFromFile();
-    void writeToFile();
+    void writeToFile() override;
 public:
     explicit FileRepository(const std::string& file_path);
-    void add(const T& item) override;
-    void remove(const T& item) override;
-    void update(const T& item, const T& newItem) override;
+    void update(const T& item, const T& newItem);
     T& operator[](int index);
-    void clearFile();
 };
 
 template<class T>
@@ -22,35 +19,31 @@ FileRepository<T>::FileRepository(const std::string& file_path) : Repository<T>(
     readFromFile();
 }
 
-template<class T>
-void FileRepository<T>::add(const T &item) {
-    Repository<T>::add(item);
-    writeToFile();
-}
-
-
-template<class T>
-void FileRepository<T>::remove(const T &item) {
-    Repository<T>::remove(item);
-    writeToFile();
-}
 
 template<class T>
 void FileRepository<T>::update(const T &item, const T &newItem) {
-    Repository<T>::update(item, newItem);
+    Repository<T>::remove(item);
+
+    try {
+        Repository<T>::add(newItem);
+    }
+    catch (const RepositoryException& e) {
+        Repository<T>::add(item);
+        throw RepositoryException("The new item already exists in the repository!");
+    }
     writeToFile();
 }
 
 template<class T>
 void FileRepository<T>::readFromFile() {
-
     std::ifstream file(Repository<T>::file_path);
+
     if(!file.is_open()) {
         throw RepositoryException("Cannot open " + Repository<T>::file_path + " file for reading!");
     }
     T item;
     while(file >> item)
-        add(item);
+        Repository<T>::add(item);
     file.close();
 }
 
@@ -69,11 +62,5 @@ void FileRepository<T>::writeToFile() {
 template<class T>
 T& FileRepository<T>::operator[](int index) {
     return Repository<T>::items[index];
-}
-
-template<class T>
-void FileRepository<T>::clearFile() {
-    std::ofstream file(Repository<T>::file_path);
-    file.close();
 }
 #endif //DOG_SHELTER_FILEREPOSITORY_H

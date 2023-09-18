@@ -2,6 +2,7 @@
 #define DOG_SHELTER_SERVICE_H
 #include "../infrastructure/FileRepository.h"
 #include "../infrastructure/HTMLRepository.h"
+#include "../infrastructure/CSVRepository.h"
 #include "../validation/DogValidator.h"
 #include "Command.h"
 #include <stack>
@@ -33,14 +34,16 @@ public:
     void redoAdminCommand();
 
     void filter(const std::string& breed, int max_age);
+    void reset_filtered_list();
     const Dog& nextDog();
     void addToAdoptionList(const Dog& dog);
-    void removeFromAdoptionList(const Dog& dog);
+    void removeFromAdoptionList(int index);
     const std::vector<Dog>& getFilteredList();
     void undoUserCommand();
     void redoUserCommand();
 
     const std::vector<Dog>& getAdoptedDogs() const;
+    const std::string& getUserRepoFilePath() const;
     static bool isNegativeInteger(const std::string& number);
 };
 

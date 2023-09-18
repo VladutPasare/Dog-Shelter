@@ -15,8 +15,6 @@ private:
     static void testUndoUserCommand();
     static void testRedoUserCommand();
     static void testFilter();
-    static void testNextDogInFilteredList();
-    static void testAddToAdoptionListFromFilteredList();
     static void testIsNegativeInteger();
 public:
     TestService();

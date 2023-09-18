@@ -7,7 +7,6 @@
 AdminWindow::AdminWindow(Service& service, QWidget *parent) : service(service) {
     this->resize(800, 650);
     this->setWindowTitle("Admin");
-
     mainLayout = new QVBoxLayout;
 
     selectDogMessage = new QMessageBox();
@@ -18,6 +17,7 @@ AdminWindow::AdminWindow(Service& service, QWidget *parent) : service(service) {
     initButtons();
     setUpTable();
     setUpMainMenu();
+    connectSignalsAndSlots();
 }
 
 void AdminWindow::setUpTable() {
@@ -25,7 +25,6 @@ void AdminWindow::setUpTable() {
     dogsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     dogsTable->setSelectionMode(QAbstractItemView::SingleSelection);
     pictureDelegate = new DogPictureDelegate;
-
     dogsTable->setItemDelegate(pictureDelegate);
     mainLayout->addWidget(dogsTable);
     dogsTableModel = new DogsTableModel(service.getDogsFromShelter());
@@ -35,7 +34,6 @@ void AdminWindow::setUpTable() {
 void AdminWindow::setUpMainMenu() {
     commandLayout = new QGridLayout;
     mainLayout->addLayout(commandLayout);
-
     commandLayout->setSpacing(15);
     commandLayout->addWidget(addButton, 0, 0);
     commandLayout->addWidget(removeButton, 0, 1);
@@ -43,12 +41,27 @@ void AdminWindow::setUpMainMenu() {
     commandLayout->addWidget(undoButton, 1, 1);
     commandLayout->addWidget(redoButton, 2, 0);
     commandLayout->addWidget(exitButton, 2, 1);
+}
 
+void AdminWindow::updateTable() {
+    dogsTableModel->layoutChanged();
+}
 
+void AdminWindow::initButtons() {
+    addButton = new CustomButton("Add");
+    removeButton = new CustomButton("Remove");
+    updateButton = new CustomButton("Update");
+    undoButton = new CustomButton("Undo");
+    redoButton = new CustomButton("Redo");
+    exitButton = new CustomButton("Exit");
+}
+
+void AdminWindow::connectSignalsAndSlots() {
     connect(addButton, &QPushButton::clicked, this, [&] () {
         addDogDialog = new AddDogDialog(service);
         addDogDialog->exec();
         emit dogsTableModel->layoutChanged();
+        delete addDogDialog;
     });
 
     connect(removeButton, &QPushButton::clicked, this, [&] () {
@@ -77,6 +90,7 @@ void AdminWindow::setUpMainMenu() {
             updateDogDialog->exec();
             emit dogsTableModel->layoutChanged();
             dogsTable->selectionModel()->clear();
+            delete updateDogDialog;
         }
     });
 
@@ -104,35 +118,4 @@ void AdminWindow::setUpMainMenu() {
         this->close();
         back();
     });
-
-}
-
-AdminWindow::~AdminWindow() {
-    delete updateDogDialog;
-    delete addDogDialog;
-    delete pictureDelegate;
-    delete mainLayout;
-    delete dogsTable;
-    delete dogsTableModel;
-    delete commandLayout;
-    delete addButton;
-    delete removeButton;
-    delete updateButton;
-    delete undoButton;
-    delete redoButton;
-    delete exitButton;
-    delete selectDogMessage;
-}
-
-void AdminWindow::updateTable() {
-    dogsTableModel->layoutChanged();
-}
-
-void AdminWindow::initButtons() {
-    addButton = new CustomButton("Add");
-    removeButton = new CustomButton("Remove");
-    updateButton = new CustomButton("Update");
-    undoButton = new CustomButton("Undo");
-    redoButton = new CustomButton("Redo");
-    exitButton = new CustomButton("Exit");
 }

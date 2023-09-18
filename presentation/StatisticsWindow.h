@@ -1,8 +1,8 @@
 #ifndef DOG_SHELTER_STATISTICSWINDOW_H
 #define DOG_SHELTER_STATISTICSWINDOW_H
+#include "Window.h"
 #include "../bussiness/Service.h"
 #include "CustomButton.h"
-#include <QWidget>
 #include <QVBoxLayout>
 #include <QTabWidget>
 #include <QChartView>
@@ -15,8 +15,7 @@
 #include <QBarCategoryAxis>
 #include <QValueAxis>
 
-class StatisticsWindow : public QWidget {
-    Q_OBJECT
+class StatisticsWindow : public Window {
 private:
     Service& service;
     QVBoxLayout* mainLayout;
@@ -30,12 +29,12 @@ private:
     QBarSet* barSet;
     QBarCategoryAxis* axisX;
     QValueAxis* axisY;
-
     CustomButton* exitButton;
+
+    void initButtons();
+    void connectSignalsAndSlots();
 public:
     explicit StatisticsWindow(Service& service, QWidget* parent = nullptr);
     void populate();
-    signals:
-        void back();
 };
 #endif //DOG_SHELTER_STATISTICSWINDOW_H

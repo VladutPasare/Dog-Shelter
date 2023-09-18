@@ -1,10 +1,10 @@
 #include "Dog.h"
 #include <sstream>
 
-Dog::Dog(const std::string& name, const std::string& breed, const std::string& photo_link, int age) {
+Dog::Dog(const std::string& name, const std::string& breed, const std::string& link, int age) {
     this->name = name;
     this->breed = breed;
-    this->photo_link = photo_link;
+    this->link = link;
     this->age = age;
 }
 
@@ -13,13 +13,13 @@ bool operator==(const Dog &d1, const Dog &d2) {
 }
 
 std::istream &operator>>(std::istream &is, Dog &dog) {
-    is >> dog.name >> dog.breed >> dog.photo_link >> dog.age;
+    is >> dog.name >> dog.breed >> dog.link >> dog.age;
     return is;
 }
 
 
 std::ostream& operator<<(std::ostream &os, const Dog &dog) {
-    os << dog.name << ' ' <<  dog.breed << ' ' << dog.photo_link << ' ' << dog.age;
+    os << dog.name << ' ' << dog.breed << ' ' << dog.link << ' ' << dog.age;
     return os;
 }
 
@@ -27,7 +27,7 @@ std::string Dog::toString() const {
     std::string DogStr;
     DogStr += "Name: " + name + " | ";
     DogStr += "Breed: " + breed + " | ";
-    DogStr += "Photo linkField: " + photo_link + " | ";
+    DogStr += "Link: " + link + " | ";
     DogStr += "Age: " + std::to_string(age);
     return DogStr;
 }
@@ -36,8 +36,11 @@ std::string Dog::toHTMLFormat() const {
     return "\n<tr>\n"
            "        <td>" + name + "</td>\n"
            "        <td>" + breed + "</td>\n"
-           "        <td>" + photo_link + "</td>\n"
            "        <td>" + std::to_string(age) + "</td>\n"
-           "</tr>";
+           "        <td><a href='" + link + + "' target='_blank'>" + link + "</a></td>\n"
+           "</tr>\n";
 }
 
+std::string Dog::toCSVFormat() const {
+    return name + ',' + breed + ',' + std::to_string(age) + ',' + link;
+}

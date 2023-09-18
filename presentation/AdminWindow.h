@@ -10,16 +10,14 @@
 #include "UpdateDogDialog.h"
 #include "CustomButton.h"
 
-#include <QWidget>
+#include "Window.h"
 #include <QTableView>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QFormLayout>
 #include <QLabel>
 
-class AdminWindow : public QWidget {
-    Q_OBJECT
-
+class AdminWindow : public Window {
 private:
     Service& service;
     UpdateDogDialog* updateDogDialog;
@@ -40,11 +38,9 @@ private:
     void setUpMainMenu();
     void setUpTable();
     void initButtons();
+    void connectSignalsAndSlots();
 public:
     explicit AdminWindow(Service& service, QWidget* parent = nullptr);
-    ~AdminWindow() override;
-    signals:
-        void back();
 
 public slots:
         void updateTable();

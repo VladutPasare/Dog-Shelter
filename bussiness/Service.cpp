@@ -88,8 +88,9 @@ void Service::redoAdminCommand() {
     admin_undo_commands.push(std::move(command));
 }
 
-const std::vector<Dog>& Service::getAdoptedDogs() const {
-    return user_repo->getItems();
+void Service::reset_filtered_list() {
+    //filtered_list.clear();
+    filtered_list = admin_repo->getItems();
 }
 
 void Service::filter(const std::string &breed, int max_age) {
@@ -97,17 +98,14 @@ void Service::filter(const std::string &breed, int max_age) {
     std::vector<Dog> dogs = admin_repo->getItems();
     current_dog_position = -1;
 
-    if(breed.empty() && max_age == -1)
-        filtered_list = dogs;
+    if(breed.empty())
+        std::copy_if(dogs.begin(), dogs.end(), std::back_inserter(filtered_list),[&] (Dog& dog){
+            return dog.getAge() < max_age;
+        });
     else
-        if(breed.empty())
-            std::copy_if(dogs.begin(), dogs.end(), std::back_inserter(filtered_list),[&] (Dog& dog){
-                return dog.getAge() < max_age;
-            });
-        else
-            std::copy_if(dogs.begin(), dogs.end(), std::back_inserter(filtered_list),[&] (Dog& dog){
-                        return dog.getBreed() == breed && dog.getAge() < max_age;
-            });
+        std::copy_if(dogs.begin(), dogs.end(), std::back_inserter(filtered_list),[&] (Dog& dog){
+                    return dog.getBreed() == breed && dog.getAge() < max_age;
+        });
 }
 
 const Dog &Service::nextDog() {
@@ -135,7 +133,9 @@ void Service::addToAdoptionList(const Dog& dog) {
         user_redo_commands.pop();
 };
 
-void Service::removeFromAdoptionList(const Dog& dog) {
+void Service::removeFromAdoptionList(int index) {
+    Dog dog = user_repo->getItems()[index];
+
     admin_repo->add(dog);
     user_repo->remove(dog);
 
@@ -146,9 +146,6 @@ void Service::removeFromAdoptionList(const Dog& dog) {
         user_redo_commands.pop();
 }
 
-const std::vector<Dog>& Service:: getFilteredList() {
-    return filtered_list;
-}
 void Service::undoUserCommand() {
     if(user_undo_commands.empty())
         throw ServiceException("Cannot undo!");
@@ -162,11 +159,25 @@ void Service::undoUserCommand() {
 void Service::redoUserCommand() {
     if(user_redo_commands.empty())
         throw ServiceException("Cannot redo!");
+
     std::unique_ptr<Command> command = std::move(user_redo_commands.top());
     user_redo_commands.pop();
     command->redo();
     user_undo_commands.push(std::move(command));
 }
+
+const std::vector<Dog>& Service:: getFilteredList() {
+    return filtered_list;
+}
+
+const std::vector<Dog>& Service::getAdoptedDogs() const {
+    return user_repo->getItems();
+}
+
+const std::string& Service::getUserRepoFilePath() const {
+    return user_repo->getFilePath();
+}
+
 bool Service::isNegativeInteger(const std::string& number) {
     if(number.size() < 2 || number[0] != '-' || number[1] == '0')
         return false;

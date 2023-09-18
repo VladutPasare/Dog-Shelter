@@ -6,16 +6,25 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QDir>
 #include <QMessageBox>
 
 class UpdateDogDialog: public QDialog {
     Q_OBJECT
 private:
+    int index;
+    Dog oldDog;
     Service& service;
+
     QVBoxLayout* mainLayout;
     QHBoxLayout* buttonsLayout;
+    QLabel* dogPhoto;
+    DogInfoLayout* dogInfoLayout;
     QPushButton* saveButton;
     QPushButton* cancelButton;
+
+    void initButtons();
+    void connectSignalsAndSlots();
 public:
     UpdateDogDialog(Service &service, int index, QWidget* parent = nullptr);
     signals:

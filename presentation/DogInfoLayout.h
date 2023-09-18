@@ -21,7 +21,5 @@ public:
     inline std::string getBreedFieldText() const { return breedField->text().toStdString(); };
     inline std::string getLinkFieldText() const { return linkField->text().toStdString(); }
     inline int getAgeFieldText() const { return ageComboBox->currentText().toInt(); };
-
-    ~DogInfoLayout() override;
 };
 #endif //DOG_SHELTER_DOGINFOLAYOUT_H

@@ -59,8 +59,3 @@ void FilterDialog::setBreedComboBoxData(const std::set<std::string>& breeds) {
     for(const std::string& breed : breeds)
         breedComboBox->addItem(QString::fromStdString(breed));
 }
-
-FilterDialog::~FilterDialog() {
-    delete mainLayout;
-    delete maxAgeSlider;
-}

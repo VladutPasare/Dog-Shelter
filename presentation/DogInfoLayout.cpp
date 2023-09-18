@@ -8,7 +8,7 @@ DogInfoLayout::DogInfoLayout(const Dog &dog) {
     setUpWidgets();
     nameField->setText(QString::fromStdString(dog.getName()));
     breedField->setText(QString::fromStdString(dog.getBreed()));
-    linkField->setText(QString::fromStdString(dog.getPhotoLink()));
+    linkField->setText(QString::fromStdString(dog.getLink()));
     ageComboBox->setCurrentText(QString::number(dog.getAge()));
 }
 
@@ -44,11 +44,4 @@ void DogInfoLayout::setUpWidgets() {
     ageComboBox->setFixedSize(80, 30);
 
     this->setSpacing(8);
-}
-
-DogInfoLayout::~DogInfoLayout() {
-    delete nameField;
-    delete breedField;
-    delete linkField;
-    delete ageComboBox;
 }

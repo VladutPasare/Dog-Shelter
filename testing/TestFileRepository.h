@@ -8,7 +8,8 @@ private:
     static void testAdd();
     static void testRemove();
     static void testUpdate();
-
+    static void testReadFromFile();
+    static void testWriteToFile();
 public:
     TestFileRepository();
 };

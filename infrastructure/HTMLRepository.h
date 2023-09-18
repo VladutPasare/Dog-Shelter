@@ -5,27 +5,15 @@
 
 template <class T>
 class HTMLRepository : public Repository<T> {
+protected:
+    void writeToFile() override;
 public:
-    explicit HTMLRepository(const std::string& filePath);
-    void add(const T& item) override;
-    void remove(const T& item) override;
-    void writeToFile();
+    explicit HTMLRepository(const std::string& file_path);
 };
 
 template<class T>
-HTMLRepository<T>::HTMLRepository(const std::string& filePath) : Repository<T>(filePath) {}
+HTMLRepository<T>::HTMLRepository(const std::string& file_path) : Repository<T>(file_path) {}
 
-template<class T>
-void HTMLRepository<T>::add(const T &item) {
-    Repository<T>::add(item);
-    writeToFile();
-}
-
-template<class T>
-void HTMLRepository<T>::remove(const T &item) {
-    Repository<T>::remove(item);
-    writeToFile();
-}
 
 template<class T>
 void HTMLRepository<T>::writeToFile() {
@@ -40,12 +28,12 @@ void HTMLRepository<T>::writeToFile() {
             "    <title>Dog Shelter</title>\n"
             "</head> \n"
             "<body> \n"
-            "<table border=\"1\"> ";
+            "<table border=\"1\"> \n";
     file << "<tr>         \n"
-            "        <td>Name</td> \n"
+            "        <td>Name</td>\n"
             "           <td>Breed</td>\n"
-            "        <td>Photo linkField</td>\n"
             "        <td>Age</td>\n"
+            "        <td>Link</td>\n"
             "</td>";
 
     for(const T &item : Repository<T>::items)
@@ -55,5 +43,6 @@ void HTMLRepository<T>::writeToFile() {
             "</table>\n"
             "</body>\n"
             "</html>";
+    file.close();
 }
 #endif //DOG_SHELTER_HTMLREPOSITORY_H

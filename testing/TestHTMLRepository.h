@@ -7,6 +7,7 @@ class TestHTMLRepository {
 private:
     static void testAdd();
     static void testRemove();
+    static void testWriteToFile();
 public:
     TestHTMLRepository();
 };

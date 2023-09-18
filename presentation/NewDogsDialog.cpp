@@ -1,7 +1,7 @@
-#include "NewDogsWindow.h"
+#include "NewDogsDialog.h"
 
-NewDogsWindow::NewDogsWindow(Service& service, QWidget* parent) : service(service) {
-    this->resize(600, 650);
+NewDogsDialog::NewDogsDialog(Service &service, QWidget *parent) : service(service), QDialog(parent) {
+    this->resize(400, 600);
 
     mainLayout = new QVBoxLayout{};
     mainLayout->setAlignment(Qt::AlignHCenter);
@@ -21,7 +21,7 @@ NewDogsWindow::NewDogsWindow(Service& service, QWidget* parent) : service(servic
     ageLabel = new QLabel{};
 
     dogDataLayout->addWidget(dogPhoto);
-    dogDataLayout->setSpacing(5);
+    dogDataLayout->setSpacing(2);
     dogDataLayout->setAlignment(dogPhoto, Qt::AlignHCenter);
     dogDataLayout->addWidget(nameLabel);
     dogDataLayout->setAlignment(nameLabel, Qt::AlignHCenter);
@@ -46,52 +46,11 @@ NewDogsWindow::NewDogsWindow(Service& service, QWidget* parent) : service(servic
     this->setLayout(mainLayout);
     mainLayout->setAlignment(dogPhoto, Qt::AlignHCenter);
 
-    service.filter("", -1);
-
-    connect(adoptButton, &QPushButton::clicked, [&] {
-        try {
-            service.addToAdoptionList(currentDog);
-            emit updateTable();
-        }
-        catch (...) {
-
-        }
-
-        if(service.getFilteredList().empty()) {
-            this->close();
-            back();
-        }
-        else
-            loadNextDogData();
-    });
-
-    connect(filterButton, &QPushButton::clicked, this, [&] () {
-        filterDialog->setBreedComboBoxData(service.getDogBreeds());
-        filterDialog->exec();
-    });
-
-    connect(filterDialog, &FilterDialog::setFilterData, this, [&] (int maxAge, const std::string& breed) {
-        service.filter(breed, maxAge);
-        if(service.getFilteredList().empty()) {
-           this->close();
-           back();
-        }
-        else
-            loadNextDogData();
-    });
-
-    connect(skipButton, &QPushButton::clicked, this, [&] {
-        loadNextDogData();
-    });
-
-    connect(returnButton, &QPushButton::clicked, this, [&] () {
-        this->close();
-        back();
-    });
+    connectSignalsAndSlots();
+    service.reset_filtered_list();
 }
 
-void NewDogsWindow::loadNextDogData() {
-
+void NewDogsDialog::loadNextDogData() {
     if(!service.getFilteredList().empty()) {
         currentDog = service.nextDog();
         loadImage();
@@ -122,7 +81,7 @@ void NewDogsWindow::loadNextDogData() {
     }
 }
 
-void NewDogsWindow::loadImage() {
+void NewDogsDialog::loadImage() {
     QPixmap image(QString::fromStdString("../images/" + currentDog.getName() + currentDog.getBreed() + ".png"));
 
     if(image.isNull()) {
@@ -135,10 +94,52 @@ void NewDogsWindow::loadImage() {
     dogPhoto->setPixmap(scaledImage);
 }
 
-void NewDogsWindow::initButtons() {
-    adoptButton = new CustomButton{"Adopt"};
-    skipButton = new CustomButton{"Skip"};
-    filterButton = new CustomButton{"Filter"};
-    returnButton = new CustomButton{"Return"};
+void NewDogsDialog::initButtons() {
+    adoptButton = new QPushButton{"Adopt"};
+    skipButton = new QPushButton{"Skip"};
+    filterButton = new QPushButton{"Filter"};
+    returnButton = new QPushButton{"Return"};
 }
 
+void NewDogsDialog::connectSignalsAndSlots() {
+    connect(adoptButton, &QPushButton::clicked, [&] {
+        try {
+            service.addToAdoptionList(currentDog);
+            emit updateTable();
+        }
+        catch (...) {
+
+        }
+
+        if(service.getFilteredList().empty()) {
+            this->close();
+            back();
+        }
+        else
+            loadNextDogData();
+    });
+
+    connect(filterButton, &QPushButton::clicked, this, [&] () {
+        filterDialog->setBreedComboBoxData(service.getDogBreeds());
+        filterDialog->exec();
+    });
+
+    connect(filterDialog, &FilterDialog::setFilterData, this, [&] (int maxAge, const std::string& breed) {
+        service.filter(breed, maxAge);
+        if(service.getFilteredList().empty()) {
+            this->close();
+            back();
+        }
+        else
+            loadNextDogData();
+    });
+
+    connect(skipButton, &QPushButton::clicked, this, [&] {
+        loadNextDogData();
+    });
+
+    connect(returnButton, &QPushButton::clicked, this, [&] () {
+        this->close();
+        back();
+    });
+}

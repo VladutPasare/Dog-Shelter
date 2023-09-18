@@ -1,6 +1,7 @@
 #ifndef DOG_SHELTER_ADDDOGDIALOG_H
 #define DOG_SHELTER_ADDDOGDIALOG_H
 #include "../bussiness/Service.h"
+#include "ImageDrop.h"
 #include "DogInfoLayout.h"
 #include <QDialog>
 #include <QVBoxLayout>
@@ -13,10 +14,14 @@ class AddDogDialog : public QDialog {
 private:
     Service& service;
     QVBoxLayout* mainLayout;
+    ImageDrop* imageDrop;
     QPushButton* saveButton;
     QPushButton* cancelButton;
     DogInfoLayout* dogInfoLayout;
     QHBoxLayout* buttonsLayout;
+
+    void initButtons();
+    void connectSignalsAndSlots();
 public:
     explicit AddDogDialog(Service& service, QWidget* parent = nullptr);
     signals:

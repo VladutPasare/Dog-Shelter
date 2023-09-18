@@ -2,17 +2,18 @@
 #include "testing/TestFileRepository.h"
 #include "testing/TestHTMLRepository.h"
 #include "testing/TestService.h"
+#include "testing/TestValidation.h"
 #include "presentation/MainWindow.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]) {
-
     TestDomain testDomain;
     TestFileRepository testRepository;
     TestHTMLRepository testUserHtmlRepository;
     TestService testService;
+    TestValidation testValidation;
 
-    const std::string &adminFile = "../files/file1.txt", userFile = "../files/file3.html";
+    const std::string &adminFile = "../files/dogs.txt", userFile = /*"../files/adoption_list.csv";//*/"../files/adoption_list.html";
     auto adminRepository = std::make_shared<FileRepository<Dog>>(adminFile);
     auto userRepository = std::make_shared<HTMLRepository<Dog>>(userFile);
     Service service(adminRepository, userRepository);

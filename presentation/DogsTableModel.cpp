@@ -29,7 +29,7 @@ QVariant DogsTableModel::data(const QModelIndex &index, int role) const {
             case 3:
                 return QString::fromStdString(std::to_string(dog.getAge()));
             case 4:
-                return QString::fromStdString(dog.getPhotoLink());
+                return QString::fromStdString(dog.getLink());
             default:
                 break;
         }
