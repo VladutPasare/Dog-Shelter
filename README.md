@@ -14,7 +14,7 @@ A software aplication developed with C++ and Qt6 framework used for managing dog
 - Statistics option having a pie chart and a bar chart for displaying the distribution of dog breeds in the shelter 
 - Externally view of the adoption list as HTML or CSV table
   
-## User Concepts and Several Aplication Features
+## Used Concepts and Several Aplication Features
 - Layered Architecture: ```presentation layer``` (application UI), ```business layer``` (aplication service), ```persistance layer``` (aplication repositories)
 - Usage of important Object Oriented Programming concepts, such as: ```abstraction```, ```encapsulation```, ```inheritance``` and ```polymorphism```. Example of ```inheritance``` usage: in the persistance layer, abstract templated class *Repository* is inherited by the derived classes *FileRepository*, *HTMLRepository* and *CSVRepository*. The aplication's service maintains a pointer to the user's repository which can have the type *HTMLRepository* or *CSVRepository* depending on the user's choice - ```polymorphism```.
 - Usage of Qt ```signals``` and ```slots```
@@ -23,4 +23,29 @@ A software aplication developed with C++ and Qt6 framework used for managing dog
 
 ## Design Patterns that were used
 - ```Model-View-Controller``` design pattern for showing the database in the table, together with custom Qt delegates for showing the dog's photos
-- ```Command``` design pattern for the undo/redo operations, a list of operations is maintained (for each function and its arguments) 
+- ```Command``` design pattern for the undo/redo operations, a list of operations is maintained (for each function and its arguments)
+  
+## Screenshots
+
+### Choose aplication mode
+<p align="center">
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/choose_mode.png" height ="400" width="450"><img/>
+</p>
+
+### Admin mode
+<p align="center">
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/admin_menu.png" width="500"><img/>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/add_dog.png" width="200"><img/>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/update_dog_info.png" width="200"><img/>
+</p>
+
+### User mode
+<p align="center">
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/user_menu.png" width="500"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/filter.png" width="300"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/pie_chart.png" width="400"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/bar_chart.png" width="400"></img>
+</p>
+<p align="center">
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/html_table.png" height="200"></img>
+</p>
