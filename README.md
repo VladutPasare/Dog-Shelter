@@ -43,8 +43,8 @@ A software aplication developed with C++ and Qt6 framework used for managing dog
 <p align="center">
 <img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/user_menu.png" width="500"></img>
 <img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/filter.png" width="300"></img>
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/pie_chart.png" width="500"></img>
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/bar_chart.png" width="500"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/pie_chart.png" width="400"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/bar_chart.png" width="400"></img>
 </p>
 <p align="center">
 <img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/html_table.png" height="200"></img>
