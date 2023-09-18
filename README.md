@@ -14,7 +14,7 @@ A software aplication developed with C++ and Qt6 framework used for managing dog
 - Statistics option having a pie chart and a bar chart for displaying the distribution of dog breeds in the shelter 
 - Externally view of the adoption list as HTML or CSV table
   
-## User Concepts and Several Aplication Features
+## Used Concepts and Several Aplication Features
 - Layered Architecture: ```presentation layer``` (application UI), ```business layer``` (aplication service), ```persistance layer``` (aplication repositories)
 - Usage of important Object Oriented Programming concepts, such as: ```abstraction```, ```encapsulation```, ```inheritance``` and ```polymorphism```. Example of ```inheritance``` usage: in the persistance layer, abstract templated class *Repository* is inherited by the derived classes *FileRepository*, *HTMLRepository* and *CSVRepository*. The aplication's service maintains a pointer to the user's repository which can have the type *HTMLRepository* or *CSVRepository* depending on the user's choice - ```polymorphism```.
 - Usage of Qt ```signals``` and ```slots```
