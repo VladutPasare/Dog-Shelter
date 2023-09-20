@@ -2,13 +2,13 @@
 
 A software aplication developed with C++ and Qt6 framework used for managing dogs from shelters, having two main modes (admin mode and user mode).
 
-## Admin mode features:
+## Admin mode features
 - A table with all the dogs from the shelter and their photos
 - Add a new dog
 - Remove an existing dog
 - Update the information of an existing dog
 
-## User mode features:
+## User mode features
 - A table showing all the adopted dogs
 - A window showing the dogs one by one allowing the user to either adopt or skip the current dog. A filter option (by age and breed) is provided.
 - Statistics option having a pie chart and a bar chart for displaying the distribution of dog breeds in the shelter 
