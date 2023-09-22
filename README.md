@@ -1,6 +1,6 @@
 # Dog-Shelter
 
-A software aplication developed with C++ and Qt6 framework used for managing dogs from shelters, having two main modes (admin mode and user mode).
+A software aplication developed with C++ and Qt6 framework for managing dogs from shelters, having two main modes (admin mode and user mode).
 
 ## Admin mode features
 - A table with all the dogs from the shelter and their photos
