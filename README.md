@@ -34,15 +34,15 @@ A software aplication developed with C++ and Qt6 framework for managing dogs fro
 
 ### Admin mode
 <p align="center">
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/admin_menu.png" width="500"><img/>
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/add_dog.png" width="200"><img/>
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/update_dog_info.png" width="200"><img/>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/admin_menu.png" height="400"><img/>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/add_dog.png" height="300"><img/>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/update_dog_info.png" height="300"><img/>
 </p>
 
 ### User mode
 <p align="center">
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/user_menu.png" width="500"></img>
-<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/filter.png" width="300"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/user_menu.png" width="400"></img>
+<img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/filter.png" width="250"></img>
 <img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/pie_chart.png" width="400"></img>
 <img src="https://github.com/vladutpasare12/Dog-Shelter/blob/main/screenshots/bar_chart.png" width="400"></img>
 </p>
