@@ -3,7 +3,7 @@
 #include <QLabel>
 
 UserWindow::UserWindow(Service& service, QWidget *parent) : service(service) {
-    this->setFixedSize(800,650);
+    this->resize(800,650);
     this->setWindowTitle("User");
 
     statisticsWindow = new StatisticsWindow(service);
