@@ -45,7 +45,7 @@ QVariant DogsTableModel::headerData(int section, Qt::Orientation orientation, in
             case 1:
                 return tr("Name");
             case 2:
-                return tr("Breed:");
+                return tr("Breed");
             case 3:
                 return tr("Age");
             case 4:
