@@ -1,4 +1,5 @@
 #include "TestService.h"
+#include <cassert>
 #include "../exceptions/ServiceException.h"
 
 TestService::TestService() {

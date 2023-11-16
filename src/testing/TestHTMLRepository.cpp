@@ -1,5 +1,6 @@
 #include "TestHTMLRepository.h"
 #include <fstream>
+#include <cassert>
 
 TestHTMLRepository::TestHTMLRepository() {
     testAdd();

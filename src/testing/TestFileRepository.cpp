@@ -1,5 +1,6 @@
 #include "TestFileRepository.h"
 #include <fstream>
+#include <cassert>
 
 TestFileRepository::TestFileRepository() {
     testAdd();

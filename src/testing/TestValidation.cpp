@@ -1,4 +1,5 @@
 #include "TestValidation.h"
+#include <cassert>
 #include "../validation/DogValidator.h"
 
 TestValidation::TestValidation() {
