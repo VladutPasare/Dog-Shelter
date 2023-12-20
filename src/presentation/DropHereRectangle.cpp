@@ -1,7 +1,7 @@
 #include "DropHereRectangle.h"
 
 DropHereRectangle::DropHereRectangle(QWidget *parent) : QLabel(parent) {
-    this->setText("Drag image here");
+    this->setText("Drop image here");
     this->setAlignment(Qt::AlignCenter);
     this->setStyleSheet("color: gray;");
 }
