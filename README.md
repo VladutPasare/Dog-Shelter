@@ -19,6 +19,7 @@ A software application developed with C++ and Qt6 framework for managing dogs fr
 - Usage of important Object Oriented Programming concepts, such as: ```abstraction```, ```encapsulation```, ```inheritance``` and ```polymorphism```. Example of ```inheritance``` usage: in the persistance layer, abstract templated class *Repository* is inherited by the derived classes *FileRepository*, *HTMLRepository* and *CSVRepository*. The aplication's service maintains a pointer to the user's repository which can have the type *HTMLRepository* or *CSVRepository* depending on the user's choice - ```polymorphism```
 - Usage of Qt ```signals``` and ```slots```
 - Exceptions handling
+- Unit testing
 - Unlimited ```undo/redo``` operations for adding, removing and updating in the admin's database and adoption list
 
 ## Design Patterns that were used
